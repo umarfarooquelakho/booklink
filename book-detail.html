@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Book Details | BOOKLINK</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#323d89",
+                        "primary-container": "#4a55a2",
+                        "secondary": "#5b5d73",
+                        "background": "#f8f9fa",
+                        "surface": "#f8f9fa",
+                        "on-background": "#191c1d",
+                        "on-surface": "#191c1d",
+                        "on-surface-variant": "#454651",
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .book-cover-shadow {
+            box-shadow: 0 24px 60px rgba(50, 61, 137, 0.3);
+        }
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .animate-scale-in {
+            animation: scaleIn 0.3s ease-out;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body">
+    <!-- Navigation -->
+    <header class="fixed top-0 w-full z-50 bg-gray-100 border-b border-gray-300 shadow-sm">
+        <nav class="flex justify-between items-center w-full px-8 h-20 max-w-7xl mx-auto">
+            <!-- Logo -->
+            <a href="home.html" class="flex items-center gap-2 no-underline">
+                <img src="booklink-logo.svg" alt="BOOKLINK Logo" class="w-12 h-12">
+                <span class="text-xl font-black text-gray-900 tracking-tight">BOOKLINK</span>
+            </a>
+            <div class="hidden md:flex items-center space-x-3">
+                <a id="navHome" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm" href="home.html">Home</a>
+                <a id="navBooks" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm" href="home.html?view=books">Books</a>
+                <a id="navPostBook" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm" href="post-book.html">Post Book</a>
+                <a id="navProfile" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm" href="profile.html">Profile</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="hidden md:flex items-center gap-2">
+                    <span class="material-symbols-outlined text-violet-500">account_circle</span>
+                    <span id="userDisplay" class="text-sm font-semibold text-gray-800">User</span>
+                </div>
+                <button onclick="logout()" class="bg-violet-100 hover:bg-violet-500 text-black px-6 py-2 rounded-lg font-semibold text-sm transition-all active:scale-95 shadow-md">
+                    Logout
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-16 px-8">
+        <div class="max-w-6xl mx-auto">
+            <!-- Breadcrumb -->
+            <div class="flex items-center gap-2 mb-8 text-sm text-on-surface-variant">
+                <a href="home.html" class="hover:text-primary transition-colors">Books</a>
+                <span>/</span>
+                <span id="bookTitle">Book Details</span>
+            </div>
+
+            <!-- Book Details Container -->
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 p-8 md:p-12">
+                    <!-- Book Cover -->
+                    <div>
+                        <img id="bookCover" src="" alt="Book Cover" class="w-full rounded-xl book-cover-shadow mb-6 object-cover" style="max-width: 300px; height: 450px;" />
+                        <button onclick="addToBookmark()" class="w-full bg-primary hover:bg-primary-container text-white py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2 mb-4">
+                            <span class="material-symbols-outlined">bookmark</span>
+                            Add to Bookmarks
+                        </button>
+                        <button onclick="takeBook()" id="takeBookBtn" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2 mb-4">
+                            <span class="material-symbols-outlined">card_giftcard</span>
+                            Take This Book
+                        </button>
+                        <button onclick="shareBook()" class="w-full border-2 border-primary text-primary hover:bg-primary/5 py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined">share</span>
+                            Share Book
+                        </button>
+                    </div>
+
+                    <!-- Book Information -->
+                    <div class="md:col-span-2">
+                        <!-- Title & Author -->
+                        <h1 id="bookDetailTitle" class="font-headline text-2xl md:text-3xl font-bold text-on-background mb-2 leading-tight">
+                            Book Title
+                        </h1>
+                        <p id="bookDetailAuthor" class="text-xl text-primary font-bold mb-6">
+                            By Author Name
+                        </p>
+
+                        <!-- Rating & Stats -->
+                        <div class="flex items-center gap-6 mb-8 pb-8 border-b border-gray-200">
+                            <div>
+                                <div class="flex gap-1">
+                                    <span id="bookRating" class="text-2xl">★★★★★</span>
+                                </div>
+                                <p class="text-on-surface-variant text-sm mt-1" id="ratingText">5 out of 5 stars</p>
+                            </div>
+                            <div class="h-12 border-l border-gray-300"></div>
+                            <div>
+                                <p class="text-on-surface-variant text-sm">Published</p>
+                                <p id="bookYear" class="text-xl font-bold">2024</p>
+                            </div>
+                            <div class="h-12 border-l border-gray-300"></div>
+                            <div>
+                                <p class="text-on-surface-variant text-sm">Genre</p>
+                                <p id="bookGenre" class="text-xl font-bold text-primary">Fiction</p>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-8">
+                            <h2 class="font-headline text-2xl font-bold mb-4">About This Book</h2>
+                            <p id="bookReview" class="text-on-surface-variant text-lg leading-relaxed mb-4">
+                                Book description goes here...
+                            </p>
+                        </div>
+
+                        <!-- ISBN & Details -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <p class="text-on-surface-variant text-sm">ISBN</p>
+                                <p id="bookISBN" class="text-lg font-semibold text-on-background">Not provided</p>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <p class="text-on-surface-variant text-sm">Posted By</p>
+                                <p id="bookPostedBy" class="text-lg font-semibold text-on-background">Editorial Team</p>
+                            </div>
+                        </div>
+
+                        <!-- Tags/Categories -->
+                        <div class="mb-8">
+                            <h3 class="font-headline font-bold mb-3">Tags</h3>
+                            <div id="bookTags" class="flex flex-wrap gap-2">
+                                <span class="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-semibold">Best Seller</span>
+                            </div>
+                        </div>
+
+                        <!-- Owner Contact Information -->
+                        <div class="bg-gradient-to-r from-indigo-50 to-blue-50 border border-indigo-200 rounded-lg p-6 mb-8">
+                            <h3 class="font-headline font-bold mb-4 flex items-center gap-2 text-lg">
+                                <span class="material-symbols-outlined text-primary">contact_mail</span>
+                                Book Owner Contact Information
+                            </h3>
+                            <div class="space-y-3">
+                                <!-- Owner Email -->
+                                <div class="flex items-start gap-3">
+                                    <span class="material-symbols-outlined text-primary mt-1">mail</span>
+                                    <div>
+                                        <p class="text-sm text-on-surface-variant mb-1">Email</p>
+                                        <p id="ownerEmail" class="font-semibold text-on-background break-all">Not provided</p>
+                                    </div>
+                                </div>
+
+                                <!-- Owner Phone -->
+                                <div id="phoneContainer" class="flex items-start gap-3 hidden">
+                                    <span class="material-symbols-outlined text-primary mt-1">phone</span>
+                                    <div>
+                                        <p class="text-sm text-on-surface-variant mb-1">Phone</p>
+                                        <p id="ownerPhone" class="font-semibold text-on-background">+1 (555) 123-4567</p>
+                                    </div>
+                                </div>
+
+                                <!-- Owner Location -->
+                                <div id="locationContainer" class="flex items-start gap-3 hidden">
+                                    <span class="material-symbols-outlined text-primary mt-1">location_on</span>
+                                    <div>
+                                        <p class="text-sm text-on-surface-variant mb-1">Location</p>
+                                        <p id="ownerLocation" class="font-semibold text-on-background">City, Country</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-indigo-200">
+                                <p class="text-xs text-on-surface-variant">
+                                    ✓ Interested readers can reach out directly to discuss this book
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Related Content -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                            <h3 class="font-headline font-bold mb-2 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary">info</span>
+                                Why This Book?
+                            </h3>
+                            <p class="text-on-surface-variant">
+                                This book is carefully selected by our editorial team for its exceptional quality, engaging content, and potential to inspire readers.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Similar Books Section -->
+            <section class="mt-16">
+                <h2 class="font-headline text-xl md:text-2xl font-bold mb-8">You Might Also Like</h2>
+                <div id="relatedBooks" class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Back to Books -->
+            <div class="text-center mt-16">
+                <a href="home.html" class="inline-block bg-primary text-white px-8 py-3 rounded-full font-bold hover:bg-primary-container transition-all">
+                    ← Back to All Books
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Take Book Modal -->
+    <div id="takeBookModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 animate-scale-in">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="font-headline text-2xl font-bold text-on-background">Request Book</h2>
+                <button onclick="closeTakeBookModal()" class="text-gray-400 hover:text-gray-600 text-2xl">✕</button>
+            </div>
+
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <p class="text-sm text-on-background">
+                    <span class="font-semibold">Contact the book owner</span> to request this book. They'll get your details and can confirm the handover.
+                </p>
+            </div>
+
+            <form onsubmit="submitBookRequest(event)" id="bookRequestForm">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-on-background mb-2">Your Email</label>
+                        <input type="email" id="requesterEmail" placeholder="your@email.com" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-on-background mb-2">Your Phone</label>
+                        <input type="tel" id="requesterPhone" placeholder="+1 (555) 123-4567" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-on-background mb-2">Message (Optional)</label>
+                        <textarea id="requesterMessage" placeholder="Tell the owner why you want this book..." rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary resize-none"></textarea>
+                    </div>
+                </div>
+
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="closeTakeBookModal()" class="flex-1 px-4 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-bold hover:bg-gray-50 transition-all">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-bold transition-all">
+                        Send Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Grey Professional Footer -->
+    <footer class="bg-gray-100 border-t border-gray-300 text-gray-800 py-12 px-8 mt-20">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="font-headline text-lg font-bold mb-3 text-gray-900">📚 BOOKLINK</h3>
+                    <p class="text-gray-600 text-sm">The Editorial Curator of your next chapter.</p>
+                </div>
+                <div>
+                    <h4 class="font-headline font-bold mb-3 text-base text-gray-900">Navigation</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="home.html" class="hover:text-gray-900 transition-colors">Home</a></li>
+                        <li><a href="home.html" class="hover:text-gray-900 transition-colors">Browse Books</a></li>
+                        <li><a href="post-book.html" class="hover:text-gray-900 transition-colors">Post Book</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-headline font-bold mb-3 text-base text-gray-900">Community</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="#" class="hover:text-gray-900 transition-colors">About</a></li>
+                        <li><a href="#" class="hover:text-gray-900 transition-colors">Blog</a></li>
+                        <li><a href="#" class="hover:text-gray-900 transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-headline font-bold mb-3 text-base text-gray-900">Legal</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="#" class="hover:text-gray-900 transition-colors">Privacy</a></li>
+                        <li><a href="#" class="hover:text-gray-900 transition-colors">Terms</a></li>
+                        <li><a href="#" class="hover:text-gray-900 transition-colors">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-300 pt-6 text-center">
+                <p class="text-gray-600 text-xs">© 2026 BOOKLINK. The Editorial Curator. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script>
+        window.addEventListener('load', async function() {
+            const { data: { session } } = await sb.auth.getSession();
+            if (session) {
+                const user = session.user;
+                localStorage.setItem('userName', user.user_metadata?.full_name || user.email.split('@')[0]);
+                localStorage.setItem('userEmail', user.email);
+                localStorage.setItem('userId', user.id);
+            }
+            displayUserInfo();
+            loadBookDetails();
+        });
+
+        function displayUserInfo() {
+            const userName = localStorage.getItem('userName');
+            document.getElementById('userDisplay').textContent = 'Welcome, ' + (userName?.split(' ')[0] || 'User');
+        }
+
+        async function loadBookDetails() {
+            const bookId = new URLSearchParams(window.location.search).get('id');
+            if (!bookId) return;
+
+            const { data: book, error } = await sb.from('books').select('*').eq('id', bookId).single();
+            if (error || !book) { document.getElementById('bookDetailTitle').textContent = 'Book not found'; return; }
+
+            document.getElementById('bookTitle').textContent = book.title;
+            document.getElementById('bookDetailTitle').textContent = book.title;
+            document.getElementById('bookDetailAuthor').textContent = 'By ' + book.author;
+            document.getElementById('bookYear').textContent = book.year || '—';
+            document.getElementById('bookGenre').textContent = book.genre ? book.genre.charAt(0).toUpperCase() + book.genre.slice(1) : '—';
+            document.getElementById('bookReview').textContent = book.review;
+            document.getElementById('bookISBN').textContent = book.isbn || 'Not provided';
+            document.getElementById('bookPostedBy').textContent = book.posted_by_name || 'Community';
+
+            const rating = parseInt(book.rating || 0);
+            document.getElementById('bookRating').innerHTML = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+            document.getElementById('ratingText').textContent = rating + ' out of 5 stars';
+
+            if (book.cover_url) document.getElementById('bookCover').src = book.cover_url;
+            if (book.owner_email) document.getElementById('ownerEmail').textContent = book.owner_email;
+            if (book.owner_phone) { document.getElementById('ownerPhone').textContent = book.owner_phone; document.getElementById('phoneContainer').classList.remove('hidden'); }
+            if (book.owner_location) { document.getElementById('ownerLocation').textContent = book.owner_location; document.getElementById('locationContainer').classList.remove('hidden'); }
+
+            loadRelatedBooks(bookId, book.genre);
+        }
+
+        async function loadRelatedBooks(currentId, genre) {
+            const { data: books } = await sb.from('books').select('id,title,author,cover_url').eq('genre', genre).neq('id', currentId).limit(4);
+            if (!books?.length) return;
+            document.getElementById('relatedBooks').innerHTML = books.map(b => `
+                <a href="book-detail.html?id=${b.id}" class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all">
+                    <img src="${b.cover_url || ''}" alt="${b.title}" class="w-full h-48 object-cover" />
+                    <div class="p-4"><h4 class="font-bold text-sm line-clamp-2">${b.title}</h4><p class="text-xs text-on-surface-variant">${b.author}</p></div>
+                </a>`).join('');
+        }
+
+        function addToBookmark() { alert('✅ Added to your bookmarks!'); }
+        function shareBook() { navigator.clipboard?.writeText(window.location.href); alert('🔗 Link copied!'); }
+        function takeBook() { document.getElementById('takeBookModal').classList.remove('hidden'); }
+        function closeTakeBookModal() { document.getElementById('takeBookModal').classList.add('hidden'); }
+
+        async function submitBookRequest(event) {
+            event.preventDefault();
+            const bookId = new URLSearchParams(window.location.search).get('id');
+            const { error } = await sb.from('book_requests').insert({
+                book_id: bookId,
+                requester_email: document.getElementById('requesterEmail').value,
+                requester_phone: document.getElementById('requesterPhone').value,
+                message: document.getElementById('requesterMessage').value,
+            });
+            if (error) { alert('❌ ' + error.message); return; }
+            alert('✅ Request sent!');
+            closeTakeBookModal();
+            document.getElementById('bookRequestForm').reset();
+        }
+
+        document.addEventListener('click', e => { if (e.target === document.getElementById('takeBookModal')) closeTakeBookModal(); });
+
+        async function logout() {
+            if (!confirm('Are you sure you want to logout?')) return;
+            await sb.auth.signOut(); localStorage.clear(); window.location.href = 'index.html';
+        }
+
+        function setActiveNav(page) {
+            const navLinks = { 'home': document.getElementById('navHome'), 'books': document.getElementById('navBooks'), 'post-book': document.getElementById('navPostBook'), 'profile': document.getElementById('navProfile') };
+            Object.values(navLinks).forEach(l => { if(l) { l.classList.remove('bg-violet-500'); l.classList.add('bg-violet-100'); } });
+            if (navLinks[page]) { navLinks[page].classList.remove('bg-violet-100'); navLinks[page].classList.add('bg-violet-500'); }
+        }
+        window.addEventListener('DOMContentLoaded', () => setActiveNav('home'));
+    </script>
+</body>
+</html>

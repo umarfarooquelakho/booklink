@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>My Profile | BOOKLINK</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#323d89",
+                        "primary-container": "#4a55a2",
+                        "secondary": "#5b5d73",
+                        "background": "#f8f9fa",
+                        "surface": "#f8f9fa",
+                        "on-background": "#191c1d",
+                        "on-surface": "#191c1d",
+                        "on-surface-variant": "#454651",
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, rgba(50, 61, 137, 0.05) 0%, rgba(74, 85, 162, 0.05) 100%);
+            border: 1px solid rgba(50, 61, 137, 0.1);
+        }
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .animate-scale-in {
+            animation: scaleIn 0.3s ease-out;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body">
+    <!-- Navigation -->
+    <header class="fixed top-0 w-full z-50 bg-gray-100 border-b border-gray-300 shadow-sm">
+        <nav class="flex justify-between items-center w-full px-8 h-20 max-w-7xl mx-auto">
+            <!-- Logo -->
+            <a href="home.html" class="flex items-center gap-2 no-underline">
+                <img src="booklink-logo.svg" alt="BOOKLINK Logo" class="w-12 h-12">
+                <span class="text-xl font-black text-gray-900 tracking-tight">BOOKLINK</span>
+            </a>
+            <div class="hidden md:flex items-center space-x-3">
+                <a id="navHome" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm"
+                    href="home.html">Home</a>
+                <a id="navBooks" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm"
+                    href="home.html?view=books">Books</a>
+                <a id="navPostBook" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm"
+                    href="post-book.html">Post Book</a>
+                <a id="navProfile" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm"
+                    href="profile.html">Profile</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="hidden md:flex items-center gap-2">
+                    <span class="material-symbols-outlined text-violet-500">account_circle</span>
+                    <span id="userDisplay" class="text-sm font-semibold text-gray-800">User</span>
+                </div>
+                <button onclick="logout()"
+                    class="bg-violet-100 hover:bg-violet-500 text-black px-6 py-2 rounded-lg font-semibold text-sm transition-all active:scale-95 shadow-md">
+                    Logout
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-16 px-8">
+        <div class="max-w-6xl mx-auto">
+            <!-- Profile Header -->
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8">
+                <div class="bg-slate-200 h-32"></div>
+                <div class="px-8 pb-8 pt-4 relative">
+                    <div class="flex flex-col md:flex-row md:items-end gap-6">
+                        <div class="flex items-center gap-4 -mt-16">
+                            <div class="w-32 h-32 bg-white border-4 border-white rounded-full shadow-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-6xl text-primary">account_circle</span>
+                            </div>
+                            <div>
+                                <h1 id="profileName" class="font-headline text-3xl font-black text-on-background">User Name</h1>
+                                <p id="profileEmail" class="text-on-surface-variant">user@example.com</p>
+                                <p class="text-sm text-on-surface-variant mt-1" id="memberSince">Member since April 2026</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <!-- Books Posted -->
+                <div class="stat-card rounded-xl p-6 text-center">
+                    <div class="flex justify-center mb-3">
+                        <span class="material-symbols-outlined text-2xl text-primary">auto_stories</span>
+                    </div>
+                    <p class="text-on-surface-variant text-xs font-medium mb-2">Books Posted</p>
+                    <p id="booksPosted" class="font-headline text-3xl md:text-4xl font-bold text-primary">0</p>
+                </div>
+
+                <!-- Seeking Requests -->
+                <div class="stat-card rounded-xl p-6 text-center">
+                    <div class="flex justify-center mb-3">
+                        <span class="material-symbols-outlined text-2xl text-primary">search</span>
+                    </div>
+                    <p class="text-on-surface-variant text-xs font-medium mb-2">Books Seeking</p>
+                    <p id="booksSeeking" class="font-headline text-3xl md:text-4xl font-bold text-primary">0</p>
+                </div>
+
+                <!-- Bookmarks -->
+                <div class="stat-card rounded-xl p-6 text-center">
+                    <div class="flex justify-center mb-3">
+                        <span class="material-symbols-outlined text-2xl text-primary">bookmark</span>
+                    </div>
+                    <p class="text-on-surface-variant text-xs font-medium mb-2">Bookmarked</p>
+                    <p id="bookmarkCount" class="font-headline text-3xl md:text-4xl font-bold text-primary">0</p>
+                </div>
+            </div>
+
+            <!-- My Books Section -->
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div class="bg-slate-100 px-8 py-6 border-b">
+                    <h2 class="font-headline text-lg md:text-xl font-bold flex items-center gap-2">
+                        <span class="material-symbols-outlined">auto_stories</span>
+                        My Posted Books
+                    </h2>
+                </div>
+                <div class="p-8">
+                    <div id="myBooksList" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                    <div id="noBooks" class="text-center py-12">
+                        <span class="material-symbols-outlined text-6xl text-gray-300 flex justify-center mb-4">book</span>
+                        <p class="text-on-surface-variant text-lg">You haven't posted any books yet</p>
+                        <a href="post-book.html" class="inline-block mt-4 bg-primary text-white px-6 py-2 rounded-full font-bold hover:bg-primary-container transition-all">
+                            Post Your First Book
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Incoming Requests Section -->
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden mt-12">
+                <div class="bg-slate-100 px-8 py-6 border-b">
+                    <h2 class="font-headline text-lg md:text-xl font-bold flex items-center gap-2">
+                        <span class="material-symbols-outlined">mail</span>
+                        Book Requests
+                        <span id="requestsBadge" class="hidden bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full"></span>
+                    </h2>
+                </div>
+                <div class="p-8">
+                    <div id="requestsList" class="space-y-4">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                    <div id="noRequests" class="text-center py-12">
+                        <span class="material-symbols-outlined text-6xl text-gray-300 flex justify-center mb-4">mail_outline</span>
+                        <p class="text-on-surface-variant text-lg">No book requests yet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Edit Book Modal -->
+    <div id="editBookModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full my-8 p-8 animate-scale-in">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="font-headline text-2xl font-bold text-on-background">Edit Book Details</h2>
+                <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 text-2xl">✕</button>
+            </div>
+
+            <form onsubmit="submitEditBook(event)" id="editBookForm" class="space-y-4">
+                <!-- Title -->
+                <div>
+                    <label class="block text-sm font-semibold text-on-background mb-2">Book Title</label>
+                    <input type="text" id="editTitle" placeholder="Enter book title" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary">
+                </div>
+
+                <!-- Author -->
+                <div>
+                    <label class="block text-sm font-semibold text-on-background mb-2">Author</label>
+                    <input type="text" id="editAuthor" placeholder="Enter author name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Genre -->
+                    <div>
+                        <label class="block text-sm font-semibold text-on-background mb-2">Genre</label>
+                        <select id="editGenre" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary">
+                            <option value="fiction">Fiction</option>
+                            <option value="mystery">Mystery</option>
+                            <option value="fantasy">Fantasy</option>
+                            <option value="sci-fi">Sci-Fi</option>
+                            <option value="biography">Biography</option>
+                            <option value="non-fiction">Non-Fiction</option>
+                            <option value="self-help">Self-Help</option>
+                            <option value="romance">Romance</option>
+                        </select>
+                    </div>
+
+                    <!-- Rating -->
+                    <div>
+                        <label class="block text-sm font-semibold text-on-background mb-2">Rating (1-5)</label>
+                        <select id="editRating" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary">
+                            <option value="1">1 Star</option>
+                            <option value="2">2 Stars</option>
+                            <option value="3">3 Stars</option>
+                            <option value="4">4 Stars</option>
+                            <option value="5">5 Stars</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Review -->
+                <div>
+                    <label class="block text-sm font-semibold text-on-background mb-2">Review/Description</label>
+                    <textarea id="editReview" placeholder="Write a brief review or description..." rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary resize-none"></textarea>
+                </div>
+
+                <!-- Cover Image URL -->
+                <div>
+                    <label class="block text-sm font-semibold text-on-background mb-2">Cover Image URL</label>
+                    <input type="url" id="editCoverUrl" placeholder="https://example.com/cover.jpg" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Year -->
+                    <div>
+                        <label class="block text-sm font-semibold text-on-background mb-2">Publication Year</label>
+                        <input type="number" id="editYear" placeholder="2024" min="1900" max="2100" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary">
+                    </div>
+
+                    <!-- ISBN -->
+                    <div>
+                        <label class="block text-sm font-semibold text-on-background mb-2">ISBN</label>
+                        <input type="text" id="editISBN" placeholder="978-0-123-45678-9" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary">
+                    </div>
+                </div>
+
+                <!-- Contact Information Section -->
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 mt-6">
+                    <h3 class="font-headline font-bold mb-4 text-on-background">Owner Contact Information</h3>
+                    
+                    <div class="space-y-4">
+                        <!-- Email -->
+                        <div>
+                            <label class="block text-sm font-semibold text-on-background mb-2">Email Address</label>
+                            <input type="email" id="editOwnerEmail" placeholder="your@email.com" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary">
+                        </div>
+
+                        <!-- Phone -->
+                        <div>
+                            <label class="block text-sm font-semibold text-on-background mb-2">Phone Number</label>
+                            <input type="tel" id="editOwnerPhone" placeholder="+1 (555) 123-4567" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary">
+                        </div>
+
+                        <!-- Location -->
+                        <div>
+                            <label class="block text-sm font-semibold text-on-background mb-2">Location</label>
+                            <input type="text" id="editOwnerLocation" placeholder="City, Country" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="closeEditModal()" class="flex-1 px-4 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-bold hover:bg-gray-50 transition-all">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 px-4 py-3 bg-primary hover:bg-primary-container text-white rounded-lg font-bold transition-all">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Light Gray Footer -->
+    <footer class="bg-gray-100 text-gray-800 py-4 px-8 w-full border-t border-gray-300">
+        <div class="max-w-full mx-auto">
+            <div class="flex items-center justify-between gap-6 flex-wrap">
+                <p class="text-xs font-medium text-gray-700">© 2026 BOOKLINK. All rights reserved.</p>
+                <div class="flex gap-4 flex-wrap justify-center">
+                    <a href="landing.html" class="text-xs text-gray-600 hover:text-gray-900 transition-colors font-medium">Home</a>
+                    <span class="text-gray-400">|</span>
+                    <a href="#" class="text-xs text-gray-600 hover:text-gray-900 transition-colors font-medium">Privacy</a>
+                    <span class="text-gray-400">|</span>
+                    <a href="#" class="text-xs text-gray-600 hover:text-gray-900 transition-colors font-medium">Terms</a>
+                    <span class="text-gray-400">|</span>
+                    <a href="#" class="text-xs text-gray-600 hover:text-gray-900 transition-colors font-medium">Contact</a>
+                </div>
+                <div class="flex gap-3">
+                    <a href="#" class="w-6 h-6 bg-gray-300 hover:bg-gray-400 rounded-full flex items-center justify-center transition-all text-gray-800">
+                        <span class="material-symbols-outlined text-xs">facebook</span>
+                    </a>
+                    <a href="#" class="w-6 h-6 bg-gray-300 hover:bg-gray-400 rounded-full flex items-center justify-center transition-all text-gray-800">
+                        <span class="material-symbols-outlined text-xs">favorite</span>
+                    </a>
+                    <a href="#" class="w-6 h-6 bg-gray-300 hover:bg-gray-400 rounded-full flex items-center justify-center transition-all text-gray-800">
+                        <span class="material-symbols-outlined text-xs">share</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script>
+        window.addEventListener('load', async function() {
+            const { data: { session } } = await sb.auth.getSession();
+            if (!session) { window.location.href = 'index.html'; return; }
+            const user = session.user;
+            localStorage.setItem('userName', user.user_metadata?.full_name || user.email.split('@')[0]);
+            localStorage.setItem('userEmail', user.email);
+            localStorage.setItem('userId', user.id);
+            displayUserInfo();
+            loadProfileData();
+        });
+
+        function displayUserInfo() {
+            const userName = localStorage.getItem('userName');
+            document.getElementById('userDisplay').textContent = 'Welcome, ' + (userName?.split(' ')[0] || 'User');
+        }
+
+        async function loadProfileData() {
+            const userId = localStorage.getItem('userId');
+            const userName = localStorage.getItem('userName');
+            const userEmail = localStorage.getItem('userEmail');
+
+            document.getElementById('profileName').textContent = userName || 'User';
+            document.getElementById('profileEmail').textContent = userEmail || '';
+
+            const { data: books } = await sb.from('books').select('*').eq('user_id', userId).order('created_at', { ascending: false });
+
+            // Get all book IDs owned by this user, then fetch requests for those books
+            const bookIds = books?.map(b => b.id) || [];
+            let requests = [];
+            if (bookIds.length > 0) {
+                const { data: reqs } = await sb.from('book_requests')
+                    .select('*, books(title)')
+                    .in('book_id', bookIds)
+                    .order('created_at', { ascending: false });
+                requests = reqs || [];
+            }
+
+            const pendingCount = requests.filter(r => r.status === 'pending').length;
+            document.getElementById('booksPosted').textContent = books?.length || 0;
+            document.getElementById('booksSeeking').textContent = pendingCount;
+
+            if (books?.length) {
+                document.getElementById('noBooks').classList.add('hidden');
+                document.getElementById('myBooksList').innerHTML = books.map(book => `
+                    <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all flex flex-col group">
+                        <div class="relative cursor-pointer overflow-hidden" onclick="window.location.href='book-detail.html?id=${book.id}'">
+                            <img src="${book.cover_url || ''}" alt="${book.title}" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300" />
+                        </div>
+                        <div class="p-4 flex-1 flex flex-col">
+                            <h3 class="font-bold text-sm line-clamp-2 mb-1">${book.title}</h3>
+                            <p class="text-xs text-on-surface-variant mb-3 flex-1">${book.author}</p>
+                            <div class="flex items-center justify-between mb-3 pb-3 border-b border-gray-200">
+                                <span class="text-sm text-primary font-bold">${'★'.repeat(parseInt(book.rating||0))}${'☆'.repeat(5-parseInt(book.rating||0))}</span>
+                                <span class="text-xs bg-primary/10 text-primary px-2 py-1 rounded">${book.genre}</span>
+                            </div>
+                            ${book.landed ? '<span class="inline-block bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full mb-3">✓ Landed</span>' : ''}
+                            <div class="flex gap-2">
+                                <button onclick="window.location.href='book-detail.html?id=${book.id}'" class="flex-1 bg-primary text-white py-2 rounded-lg font-semibold text-xs flex items-center justify-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">info</span>View
+                                </button>
+                                <button onclick="openEditModal('${book.id}')" class="flex-1 bg-blue-50 text-blue-600 py-2 rounded-lg font-semibold text-xs flex items-center justify-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">edit</span>Edit
+                                </button>
+                                ${!book.landed ? `<button onclick="markAsLanded('${book.id}')" class="flex-1 bg-green-50 text-green-600 py-2 rounded-lg font-semibold text-xs flex items-center justify-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">check_circle</span>Landed
+                                </button>` : ''}
+                                <button onclick="deleteBook('${book.id}')" class="flex-1 bg-red-50 text-red-600 py-2 rounded-lg font-semibold text-xs flex items-center justify-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">delete</span>Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>`).join('');
+            }
+
+            if (requests?.length) {
+                document.getElementById('noRequests').classList.add('hidden');
+                document.getElementById('requestsList').innerHTML = requests.map((req) => `
+                    <div class="border ${req.status === 'approved' ? 'border-green-200 bg-green-50' : req.status === 'rejected' ? 'border-red-200 bg-red-50' : 'border-amber-200 bg-amber-50'} rounded-lg p-4">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <h4 class="font-bold text-on-background">📚 ${req.books?.title || 'Book'}</h4>
+                                    <span class="text-xs font-bold px-2 py-0.5 rounded-full ${req.status === 'approved' ? 'bg-green-200 text-green-800' : req.status === 'rejected' ? 'bg-red-200 text-red-800' : 'bg-amber-200 text-amber-800'}">
+                                        ${req.status === 'approved' ? '✓ Approved' : req.status === 'rejected' ? '✗ Rejected' : '⏳ Pending'}
+                                    </span>
+                                </div>
+                                <div class="space-y-1 text-xs text-on-surface-variant">
+                                    <p>📧 <span class="font-semibold">From:</span> ${req.requester_email}</p>
+                                    <p>📞 <span class="font-semibold">Phone:</span> ${req.requester_phone || '—'}</p>
+                                    ${req.message ? `<p>💬 <span class="font-semibold">Message:</span> ${req.message}</p>` : ''}
+                                    <p>🕐 <span class="font-semibold">Requested:</span> ${new Date(req.created_at).toLocaleDateString()}</p>
+                                </div>
+                            </div>
+                            ${req.status === 'pending' ? `
+                            <div class="flex gap-2 md:flex-col">
+                                <button onclick="approveRequest('${req.id}','${req.book_id}')" class="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold text-xs flex items-center justify-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">check</span>Approve
+                                </button>
+                                <button onclick="rejectRequest('${req.id}')" class="flex-1 bg-red-100 hover:bg-red-200 text-red-600 px-4 py-2 rounded-lg font-semibold text-xs flex items-center justify-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">close</span>Reject
+                                </button>
+                            </div>` : ''}
+                        </div>
+                    </div>`).join('');
+            }
+        }
+
+        async function markAsLanded(bookId) {
+            await sb.from('books').update({ landed: true }).eq('id', bookId);
+            alert('✅ Book marked as landed!'); loadProfileData();
+        }
+
+        async function approveRequest(reqId, bookId) {
+            await sb.from('books').update({ landed: true }).eq('id', bookId);
+            await sb.from('book_requests').update({ status: 'approved' }).eq('id', reqId);
+            alert('✅ Request approved!'); loadProfileData();
+        }
+
+        async function rejectRequest(reqId) {
+            await sb.from('book_requests').update({ status: 'rejected' }).eq('id', reqId);
+            alert('❌ Request rejected'); loadProfileData();
+        }
+
+        async function deleteBook(bookId) {
+            if (!confirm('❌ Delete this book?')) return;
+            await sb.from('books').delete().eq('id', bookId);
+            loadProfileData();
+        }
+
+        let currentEditingBookId = null;
+
+        async function openEditModal(bookId) {
+            currentEditingBookId = bookId;
+            const { data: book } = await sb.from('books').select('*').eq('id', bookId).single();
+            if (!book) return;
+            document.getElementById('editTitle').value = book.title || '';
+            document.getElementById('editAuthor').value = book.author || '';
+            document.getElementById('editGenre').value = book.genre || 'fiction';
+            document.getElementById('editRating').value = book.rating || '5';
+            document.getElementById('editReview').value = book.review || '';
+            document.getElementById('editCoverUrl').value = book.cover_url || '';
+            document.getElementById('editYear').value = book.year || '';
+            document.getElementById('editISBN').value = book.isbn || '';
+            document.getElementById('editOwnerEmail').value = book.owner_email || '';
+            document.getElementById('editOwnerPhone').value = book.owner_phone || '';
+            document.getElementById('editOwnerLocation').value = book.owner_location || '';
+            document.getElementById('editBookModal').classList.remove('hidden');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editBookModal').classList.add('hidden');
+            currentEditingBookId = null;
+        }
+
+        async function submitEditBook(event) {
+            event.preventDefault();
+            if (!currentEditingBookId) return;
+            const { error } = await sb.from('books').update({
+                title: document.getElementById('editTitle').value,
+                author: document.getElementById('editAuthor').value,
+                genre: document.getElementById('editGenre').value,
+                rating: document.getElementById('editRating').value,
+                review: document.getElementById('editReview').value,
+                cover_url: document.getElementById('editCoverUrl').value,
+                year: document.getElementById('editYear').value,
+                isbn: document.getElementById('editISBN').value,
+                owner_email: document.getElementById('editOwnerEmail').value,
+                owner_phone: document.getElementById('editOwnerPhone').value,
+                owner_location: document.getElementById('editOwnerLocation').value,
+            }).eq('id', currentEditingBookId);
+            if (error) { alert('❌ ' + error.message); return; }
+            alert('✅ Book updated!'); closeEditModal(); loadProfileData();
+        }
+
+        document.addEventListener('click', e => { if (e.target === document.getElementById('editBookModal')) closeEditModal(); });
+
+        async function logout() {
+            if (!confirm('Are you sure you want to logout?')) return;
+            await sb.auth.signOut(); localStorage.clear(); window.location.href = 'index.html';
+        }
+
+        function setActiveNav(page) {
+            const navLinks = { 'home': document.getElementById('navHome'), 'books': document.getElementById('navBooks'), 'post-book': document.getElementById('navPostBook'), 'profile': document.getElementById('navProfile') };
+            Object.values(navLinks).forEach(l => { if(l) { l.classList.remove('bg-violet-500'); l.classList.add('bg-violet-100'); } });
+            if (navLinks[page]) { navLinks[page].classList.remove('bg-violet-100'); navLinks[page].classList.add('bg-violet-500'); }
+        }
+        window.addEventListener('DOMContentLoaded', () => setActiveNav('profile'));
+    </script>
+</body>
+</html>

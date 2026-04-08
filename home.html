@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>BOOKLINK | Browse Books</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed": "#ffddb4",
+                        "on-primary-fixed": "#000d60",
+                        "on-secondary-container": "#5f6177",
+                        "on-error-container": "#93000a",
+                        "background": "#f8f9fa",
+                        "surface-tint": "#4d58a5",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f0f1f2",
+                        "surface-variant": "#e1e3e4",
+                        "primary-fixed-dim": "#bcc3ff",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#dfe0ff",
+                        "secondary-container": "#dddef8",
+                        "error": "#ba1a1a",
+                        "surface": "#f8f9fa",
+                        "on-primary-container": "#cdd1ff",
+                        "surface-container-high": "#e7e8e9",
+                        "inverse-primary": "#bcc3ff",
+                        "inverse-surface": "#2e3132",
+                        "surface-container-lowest": "#ffffff",
+                        "on-background": "#191c1d",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#291800",
+                        "on-tertiary-fixed-variant": "#633f00",
+                        "tertiary": "#603d00",
+                        "on-secondary-fixed": "#181a2d",
+                        "surface-dim": "#d9dadb",
+                        "outline": "#767682",
+                        "primary-container": "#4a55a2",
+                        "on-tertiary-container": "#ffcb87",
+                        "primary": "#323d89",
+                        "surface-bright": "#f8f9fa",
+                        "on-surface-variant": "#454651",
+                        "on-primary-fixed-variant": "#34408c",
+                        "surface-container-highest": "#e1e3e4",
+                        "tertiary-container": "#7f5200",
+                        "secondary": "#5b5d73",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#43455a",
+                        "surface-container-low": "#f3f4f5",
+                        "tertiary-fixed-dim": "#f9bb67",
+                        "outline-variant": "#c6c5d3",
+                        "surface-container": "#edeeef",
+                        "secondary-fixed": "#e0e1fb",
+                        "secondary-fixed-dim": "#c3c5de",
+                        "on-surface": "#191c1d",
+                        "on-tertiary": "#ffffff"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .tonal-shift {
+            transition: background-color 0.3s ease;
+        }
+
+        .book-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(198, 197, 211, 0.1);
+        }
+
+        .book-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 24px 60px rgba(50, 61, 137, 0.2);
+            border-color: rgba(50, 61, 137, 0.2);
+        }
+
+        .book-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .star-rating {
+            color: #f59e0b;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body">
+    <!-- Top Navigation Bar -->
+    <header class="fixed top-0 w-full z-50 bg-gray-100 border-b border-gray-300 shadow-sm">
+        <nav class="flex justify-between items-center w-full px-8 h-20 max-w-7xl mx-auto">
+            <!-- Logo -->
+            <a href="home.html" class="flex items-center gap-2 no-underline">
+                <img src="booklink-logo.svg" alt="BOOKLINK Logo" class="w-12 h-12">
+                <span class="text-xl font-black text-gray-900 tracking-tight">BOOKLINK</span>
+            </a>
+            
+            <div class="hidden md:flex items-center space-x-3">
+                <a id="navHome" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm"
+                    href="home.html">Home</a>
+                <a id="navBooks" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm"
+                    href="home.html?view=books">Books</a>
+                <a id="navPostBook" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm"
+                    href="post-book.html">Post Book</a>
+                <a id="navProfile" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm"
+                    href="profile.html">Profile</a>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <div class="hidden md:flex items-center gap-2">
+                    <span class="material-symbols-outlined text-violet-500">account_circle</span>
+                    <span id="userDisplay" class="text-sm font-semibold text-gray-800">User</span>
+                </div>
+                <button onclick="logout()"
+                    class="bg-violet-100 hover:bg-violet-500 text-black px-6 py-2 rounded-lg font-semibold text-sm transition-all active:scale-95 shadow-md">
+                    Logout
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-16 px-8">
+        <div class="max-w-7xl mx-auto">
+            <!-- Hero Section -->
+            <section class="mb-16">
+                <div class="max-w-3xl">
+                    <h1 class="font-headline text-3xl md:text-4xl font-bold text-on-background mb-2 tracking-tight leading-tight">
+                        Discover Your Next Read
+                    </h1>
+                    <p class="text-sm md:text-base text-primary font-semibold mb-4">
+                        📚 The Editorial Curator of Your Next Chapter
+                    </p>
+                    <p class="text-xs md:text-sm text-on-surface-variant font-medium">
+                        Explore our curated collection of books handpicked by our editorial team and community members.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Books Grid -->
+            <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="books">
+                <div id="booksList" class="col-span-full">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4" id="booksContainer">
+                        <!-- Books will be loaded here dynamically -->
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyState" class="col-span-full text-center py-16">
+                    <span class="material-symbols-outlined text-8xl text-surface-variant mb-4 block">library_books</span>
+                    <h3 class="font-headline text-lg md:text-xl font-bold text-on-background mb-2">No Books Yet</h3>
+                    <p class="text-sm md:text-base text-on-surface-variant mb-6">Be the first to share a book with our community!</p>
+                    <a href="post-book.html" class="inline-block bg-primary text-white px-8 py-3 rounded-full font-bold hover:bg-primary-container transition-all">
+                        Post First Book
+                    </a>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="mt-24 p-12 md:p-16 bg-gradient-to-r from-primary via-primary-container to-primary rounded-2xl text-white text-center shadow-lg" style="box-shadow: 0 20px 60px rgba(50, 61, 137, 0.3);">
+                <h2 class="font-headline text-2xl md:text-3xl font-bold mb-4 tracking-tight">Have a Book to Share?</h2>
+                <p class="text-sm md:text-base mb-8 opacity-95 max-w-2xl mx-auto font-medium">
+                    Contribute to our community by posting your favorite book for others to discover.
+                </p>
+                <a href="post-book.html"
+                    class="inline-block bg-white text-primary px-10 py-4 rounded-full font-bold text-lg hover:bg-surface-container-lowest shadow-lg hover:shadow-xl transition-all active:scale-95 duration-300">
+                    Post a Book Now
+                </a>
+            </section>
+        </div>
+    </main>
+
+    <!-- Grey Professional Footer -->
+    <footer class="bg-gray-100 border-t border-gray-300 text-gray-800 py-12 px-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="font-headline text-lg font-bold mb-3 text-gray-900">📚 BOOKLINK</h3>
+                    <p class="text-gray-600 text-sm">The Editorial Curator of your next chapter.</p>
+                </div>
+                <div>
+                    <h4 class="font-headline font-bold mb-3 text-base text-gray-900">Navigation</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="landing.html" class="hover:text-gray-900 transition-colors">Home</a></li>
+                        <li><a href="home.html" class="hover:text-gray-900 transition-colors">Browse Books</a></li>
+                        <li><a href="post-book.html" class="hover:text-gray-900 transition-colors">Post Book</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-headline font-bold mb-3 text-base text-gray-900">Community</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="#" class="hover:text-gray-900 transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-gray-900 transition-colors">Blog</a></li>
+                        <li><a href="#" class="hover:text-gray-900 transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-headline font-bold mb-3 text-base text-gray-900">Legal</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="#" class="hover:text-gray-900 transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-gray-900 transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-gray-900 transition-colors">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-300 pt-6 grid grid-cols-1 md:grid-cols-2 items-center">
+                <p class="text-gray-600 text-xs text-center md:text-left">© 2026 BOOKLINK. The Editorial Curator. All rights reserved.</p>
+                <div class="flex justify-center md:justify-end gap-4 mt-4 md:mt-0">
+                    <a href="#" class="w-9 h-9 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-full flex items-center justify-center transition-all">
+                        <span class="material-symbols-outlined text-sm">facebook</span>
+                    </a>
+                    <a href="#" class="w-9 h-9 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-full flex items-center justify-center transition-all">
+                        <span class="material-symbols-outlined text-sm">favorite</span>
+                    </a>
+                    <a href="#" class="w-9 h-9 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-full flex items-center justify-center transition-all">
+                        <span class="material-symbols-outlined text-sm">share</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script>
+        // Init — books visible to everyone, auth optional
+        window.addEventListener('load', async function () {
+            const { data: { session } } = await sb.auth.getSession();
+            if (session) {
+                const user = session.user;
+                localStorage.setItem('userName', user.user_metadata?.full_name || user.email.split('@')[0]);
+                localStorage.setItem('userEmail', user.email);
+                localStorage.setItem('userId', user.id);
+            }
+            displayUserInfo();
+            loadAndDisplayBooks();
+        });
+
+        function displayUserInfo() {
+            const userName = localStorage.getItem('userName');
+            const userDisplay = document.getElementById('userDisplay');
+            if (userName) {
+                userDisplay.textContent = 'Welcome, ' + (userName.split(' ')[0]);
+            } else {
+                userDisplay.textContent = 'Guest';
+            }
+        }
+
+        async function loadAndDisplayBooks() {
+            const booksContainer = document.getElementById('booksContainer');
+            const emptyState = document.getElementById('emptyState');
+            booksContainer.innerHTML = '<p class="col-span-full text-center text-gray-400 py-10">Loading books...</p>';
+
+            const { data: books, error } = await sb.from('books').select('*').order('created_at', { ascending: false });
+
+            booksContainer.innerHTML = '';
+            if (error || !books || books.length === 0) {
+                emptyState.style.display = 'block'; return;
+            }
+            emptyState.style.display = 'none';
+            books.forEach((book, index) => booksContainer.appendChild(createBookCard(book, index)));
+        }
+
+        function createBookCard(book, index) {
+            const colors = [
+                { bg: 'from-primary/30 to-primary-container/30', text: 'text-primary' },
+                { bg: 'from-secondary/30 to-secondary-container/30', text: 'text-secondary' },
+                { bg: 'from-tertiary/30 to-tertiary-container/30', text: 'text-tertiary' }
+            ];
+            const color = colors[index % colors.length];
+            const card = document.createElement('div');
+            card.className = 'book-card bg-surface-container-lowest rounded-xl overflow-hidden cursor-pointer';
+            card.onclick = () => window.location.href = 'book-detail.html?id=' + book.id;
+            const stars = '★'.repeat(parseInt(book.rating || 0)) + '☆'.repeat(5 - parseInt(book.rating || 0));
+            card.innerHTML = `
+                <div class="w-full h-40 bg-gradient-to-br ${color.bg} flex items-center justify-center overflow-hidden relative">
+                    ${book.cover_url ? `<img src="${book.cover_url}" alt="${book.title}" class="w-full h-full object-cover">` :
+                        `<span class="material-symbols-outlined ${color.text} text-4xl opacity-50">auto_stories</span>`}
+                </div>
+                <div class="p-3">
+                    <h3 class="font-headline text-xs font-bold text-on-background mb-1 line-clamp-2">${book.title}</h3>
+                    <p class="text-on-surface-variant text-xs font-semibold mb-1">By ${book.author}</p>
+                    <div class="flex gap-0.5 mb-2">
+                        <span class="star-rating text-xs">${stars}</span>
+                        <span class="text-xs text-on-surface-variant">(${book.rating}/5)</span>
+                    </div>
+                    <p class="text-on-surface-variant mb-2 text-xs line-clamp-1">${(book.review || '').substring(0, 40)}...</p>
+                    <div class="flex justify-between items-center gap-1">
+                        <span class="text-xs font-bold text-white bg-primary px-2 py-0.5 rounded-full">
+                            ${book.genre ? book.genre.charAt(0).toUpperCase() + book.genre.slice(1) : 'Genre'}
+                        </span>
+                        <button onclick="event.stopPropagation(); bookmarkBook('${book.id}')" class="bg-primary hover:bg-primary-container text-white p-1 rounded transition-all" title="Bookmark">
+                            <span class="material-symbols-outlined text-xs">bookmark</span>
+                        </button>
+                    </div>
+                    ${book.posted_by_name ? `<p class="text-xs text-on-surface-variant mt-2 pt-2 border-t border-outline-variant/20 line-clamp-1">👤 ${book.posted_by_name}</p>` : ''}
+                    ${book.landed ? `<div class="mt-2"><span class="inline-block bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded-full">✓ Landed</span></div>` : ''}
+                </div>`;
+            return card;
+        }
+
+        async function bookmarkBook(bookId) {
+            const userId = localStorage.getItem('userId');
+            if (!userId) return;
+            const { error } = await sb.from('bookmarks').upsert({ user_id: userId, book_id: bookId }, { onConflict: 'user_id,book_id' });
+            alert(error ? '❌ Could not bookmark' : '📚 Added to bookmarks!');
+        }
+
+        async function logout() {
+            if (!confirm('Are you sure you want to logout?')) return;
+            await sb.auth.signOut();
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        function setActiveNav(page) {
+            const navLinks = { 'home': document.getElementById('navHome'), 'books': document.getElementById('navBooks'), 'post-book': document.getElementById('navPostBook'), 'profile': document.getElementById('navProfile') };
+            Object.values(navLinks).forEach(link => { if (link) { link.classList.remove('bg-violet-500'); link.classList.add('bg-violet-100'); } });
+            if (navLinks[page]) { navLinks[page].classList.remove('bg-violet-100'); navLinks[page].classList.add('bg-violet-500'); }
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            const view = new URLSearchParams(window.location.search).get('view');
+            setActiveNav(view === 'books' ? 'books' : 'home');
+        });
+    </script>
+</body>
+</html>

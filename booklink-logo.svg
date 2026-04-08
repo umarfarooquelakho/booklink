@@ -1,0 +1,21 @@
+<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <!-- Left Book -->
+  <path d="M12 8C10.9 8 10 8.9 10 10V38C10 39.1 10.9 40 12 40H22V8H12Z" fill="#667eea" opacity="0.8"/>
+  <path d="M22 8V40H24V8H22Z" fill="#667eea"/>
+  
+  <!-- Right Book -->
+  <path d="M26 8C24.9 8 24 8.9 24 10V38C24 39.1 24.9 40 26 40H36C37.1 40 38 39.1 38 38V10C38 8.9 37.1 8 36 8H26Z" fill="#764ba2" opacity="0.8"/>
+  <path d="M24 8V40H26V8H24Z" fill="#764ba2"/>
+  
+  <!-- Link connector -->
+  <circle cx="24" cy="24" r="4" fill="#f59e0b"/>
+  
+  <!-- Decorative elements - pages -->
+  <line x1="14" y1="16" x2="20" y2="16" stroke="white" stroke-width="1.5" opacity="0.6"/>
+  <line x1="14" y1="22" x2="20" y2="22" stroke="white" stroke-width="1.5" opacity="0.6"/>
+  <line x1="14" y1="28" x2="20" y2="28" stroke="white" stroke-width="1.5" opacity="0.6"/>
+  
+  <line x1="28" y1="16" x2="34" y2="16" stroke="white" stroke-width="1.5" opacity="0.6"/>
+  <line x1="28" y1="22" x2="34" y2="22" stroke="white" stroke-width="1.5" opacity="0.6"/>
+  <line x1="28" y1="28" x2="34" y2="28" stroke="white" stroke-width="1.5" opacity="0.6"/>
+</svg>
