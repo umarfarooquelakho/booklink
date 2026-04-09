@@ -57,31 +57,31 @@
 </head>
 
 <body class="bg-background text-on-background font-body">
-    <!-- Navigation -->
-    <header class="fixed top-0 w-full z-50 bg-gray-100 border-b border-gray-300 shadow-sm">
-        <nav class="flex justify-between items-center w-full px-8 h-20 max-w-7xl mx-auto">
-            <!-- Logo -->
-            <a href="home.html" class="flex items-center gap-2 no-underline">
-                <img src="booklink-logo.svg" alt="BOOKLINK Logo" class="w-12 h-12">
-                <span class="text-xl font-black text-gray-900 tracking-tight">BOOKLINK</span>
+    <!-- Professional Navbar -->
+    <header class="fixed top-0 w-full z-50" style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);border-bottom:1px solid rgba(255,255,255,0.08);">
+        <nav class="flex justify-between items-center w-full px-6 h-16 max-w-7xl mx-auto">
+            <a href="home.html" class="flex items-center gap-2.5 no-underline group">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-lg" style="background:linear-gradient(135deg,#667eea,#764ba2);">📚</div>
+                <span class="text-lg font-black text-white tracking-tight group-hover:text-purple-300 transition-colors">BOOKLINK</span>
             </a>
-            <div class="hidden md:flex items-center space-x-3">
-                <a id="navHome" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm" href="home.html">Home</a>
-                <a id="navBooks" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm" href="home.html?view=books">Books</a>
-                <a id="navPostBook" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm" href="post-book.html">Post Book</a>
-                <a id="navProfile" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm" href="profile.html">Profile</a>
+            <div class="hidden md:flex items-center gap-1">
+                <a id="navHome" href="home.html" class="nav-link flex items-center gap-1.5 text-gray-300 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/10"><span class="material-symbols-outlined" style="font-size:16px;">home</span>Home</a>
+                <a id="navBooks" href="home.html?view=books" class="nav-link flex items-center gap-1.5 text-gray-300 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/10"><span class="material-symbols-outlined" style="font-size:16px;">library_books</span>Books</a>
+                <a id="navPostBook" href="post-book.html" class="nav-link flex items-center gap-1.5 text-gray-300 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/10"><span class="material-symbols-outlined" style="font-size:16px;">add_circle</span>Post Book</a>
+                <a id="navProfile" href="profile.html" class="nav-link flex items-center gap-1.5 text-gray-300 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/10"><span class="material-symbols-outlined" style="font-size:16px;">person</span>Profile</a>
             </div>
-            <div class="flex items-center gap-4">
-                <div class="hidden md:flex items-center gap-2">
-                    <span class="material-symbols-outlined text-violet-500">account_circle</span>
-                    <span id="userDisplay" class="text-sm font-semibold text-gray-800">User</span>
+            <div class="flex items-center gap-3">
+                <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full" style="background:rgba(255,255,255,0.08);">
+                    <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white" style="background:linear-gradient(135deg,#667eea,#764ba2);" id="userAvatar">U</div>
+                    <span id="userDisplay" class="text-sm font-medium text-gray-200">User</span>
                 </div>
-                <button onclick="logout()" class="bg-violet-100 hover:bg-violet-500 text-black px-6 py-2 rounded-lg font-semibold text-sm transition-all active:scale-95 shadow-md">
-                    Logout
+                <button onclick="logout()" class="flex items-center gap-1.5 text-sm font-semibold px-4 py-2 rounded-lg transition-all active:scale-95" style="background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);" onmouseover="this.style.background='rgba(239,68,68,0.3)'" onmouseout="this.style.background='rgba(239,68,68,0.15)'">
+                    <span class="material-symbols-outlined" style="font-size:16px;">logout</span>Logout
                 </button>
             </div>
         </nav>
     </header>
+    <style>.nav-link.active{background:rgba(102,126,234,0.2)!important;color:#a5b4fc!important;}</style>
 
     <!-- Main Content -->
     <main class="pt-32 pb-16 px-8">
@@ -142,6 +142,9 @@
                                 <p id="bookGenre" class="text-xl font-bold text-primary">Fiction</p>
                             </div>
                         </div>
+
+                        <!-- Loan Status Badge -->
+                        <div id="loanStatusBadge" class="mb-6"></div>
 
                         <!-- Description -->
                         <div class="mb-8">
@@ -260,15 +263,31 @@
             <form onsubmit="submitBookRequest(event)" id="bookRequestForm">
                 <div class="space-y-4">
                     <div>
+                        <label class="block text-sm font-semibold text-on-background mb-2">Your Name</label>
+                        <input type="text" id="requesterName" placeholder="Your full name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary">
+                    </div>
+                    <div>
                         <label class="block text-sm font-semibold text-on-background mb-2">Your Email</label>
                         <input type="email" id="requesterEmail" placeholder="your@email.com" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary">
                     </div>
-
                     <div>
                         <label class="block text-sm font-semibold text-on-background mb-2">Your Phone</label>
                         <input type="tel" id="requesterPhone" placeholder="+1 (555) 123-4567" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary">
                     </div>
-
+                    <div>
+                        <label class="block text-sm font-semibold text-on-background mb-2">📅 Loan Duration</label>
+                        <div class="grid grid-cols-3 gap-2 mb-2">
+                            <button type="button" onclick="setLoanDays(7)" class="loan-btn py-2 rounded-lg border-2 border-gray-200 text-sm font-semibold hover:border-primary hover:text-primary transition-all">7 Days</button>
+                            <button type="button" onclick="setLoanDays(14)" class="loan-btn py-2 rounded-lg border-2 border-primary text-primary text-sm font-semibold bg-primary/5">14 Days</button>
+                            <button type="button" onclick="setLoanDays(30)" class="loan-btn py-2 rounded-lg border-2 border-gray-200 text-sm font-semibold hover:border-primary hover:text-primary transition-all">30 Days</button>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="customDays" placeholder="Custom days" min="1" max="365" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary" oninput="setLoanDays(this.value)">
+                            <span class="text-sm text-gray-500">days</span>
+                        </div>
+                        <input type="hidden" id="loanDays" value="14">
+                        <p id="dueDatePreview" class="text-xs text-primary font-medium mt-2">📅 Due back by: <span id="dueDateText"></span></p>
+                    </div>
                     <div>
                         <label class="block text-sm font-semibold text-on-background mb-2">Message (Optional)</label>
                         <textarea id="requesterMessage" placeholder="Tell the owner why you want this book..." rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary resize-none"></textarea>
@@ -343,7 +362,12 @@
 
         function displayUserInfo() {
             const userName = localStorage.getItem('userName');
-            document.getElementById('userDisplay').textContent = 'Welcome, ' + (userName?.split(' ')[0] || 'User');
+            const name = userName?.split(' ')[0] || 'User';
+            const el = document.getElementById('userDisplay');
+            const av = document.getElementById('userAvatar');
+            if (el) el.textContent = name;
+            if (av) av.textContent = name.charAt(0).toUpperCase();
+        }
         }
 
         async function loadBookDetails() {
@@ -362,12 +386,36 @@
             document.getElementById('bookISBN').textContent = book.isbn || 'Not provided';
             document.getElementById('bookPostedBy').textContent = book.posted_by_name || 'Community';
 
+            // Show loan status
+            const loanStatusEl = document.getElementById('loanStatusBadge');
+            if (loanStatusEl) {
+                if (book.loan_status === 'on_loan') {
+                    const due = book.loan_due_date ? new Date(book.loan_due_date) : null;
+                    const daysLeft = due ? Math.ceil((due - new Date()) / (1000*60*60*24)) : null;
+                    loanStatusEl.innerHTML = `<div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-amber-100 text-amber-800 border border-amber-300">
+                        <span class="material-symbols-outlined text-base">schedule</span>
+                        Currently On Loan${daysLeft !== null ? ' — due back in ' + daysLeft + ' day(s)' : ''}
+                    </div>`;
+                } else {
+                    loanStatusEl.innerHTML = `<div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-green-100 text-green-800 border border-green-300">
+                        <span class="material-symbols-outlined text-base">check_circle</span>Available to Borrow
+                    </div>`;
+                }
+            }
+
             const rating = parseInt(book.rating || 0);
             document.getElementById('bookRating').innerHTML = '★'.repeat(rating) + '☆'.repeat(5 - rating);
             document.getElementById('ratingText').textContent = rating + ' out of 5 stars';
 
             if (book.cover_url) document.getElementById('bookCover').src = book.cover_url;
             if (book.owner_email) document.getElementById('ownerEmail').textContent = book.owner_email;
+
+            // Pre-fill requester email if logged in
+            const userEmail = localStorage.getItem('userEmail');
+            if (userEmail) {
+                const emailField = document.getElementById('requesterEmail');
+                if (emailField) emailField.value = userEmail;
+            }
             if (book.owner_phone) { document.getElementById('ownerPhone').textContent = book.owner_phone; document.getElementById('phoneContainer').classList.remove('hidden'); }
             if (book.owner_location) { document.getElementById('ownerLocation').textContent = book.owner_location; document.getElementById('locationContainer').classList.remove('hidden'); }
 
@@ -392,19 +440,36 @@
         async function submitBookRequest(event) {
             event.preventDefault();
             const bookId = new URLSearchParams(window.location.search).get('id');
+            const email = document.getElementById('requesterEmail').value.trim();
+            const phone = document.getElementById('requesterPhone').value.trim();
+
+            if (!email) { alert('❌ Please enter your email.'); return; }
+
+            const btn = event.target.querySelector('button[type="submit"]');
+            btn.disabled = true; btn.textContent = 'Sending...';
+
             const { error } = await sb.from('book_requests').insert({
                 book_id: bookId,
-                requester_email: document.getElementById('requesterEmail').value,
-                requester_phone: document.getElementById('requesterPhone').value,
-                message: document.getElementById('requesterMessage').value,
+                requester_email: email,
+                requester_phone: phone,
+                message: document.getElementById('requesterMessage').value.trim(),
+                status: 'pending'
             });
-            if (error) { alert('❌ ' + error.message); return; }
-            alert('✅ Request sent!');
+
+            btn.disabled = false; btn.textContent = 'Send Request';
+
+            if (error) {
+                console.error('Request error:', error);
+                alert('❌ Failed to send request: ' + error.message);
+                return;
+            }
+            alert('✅ Request sent! The book owner will be notified.');
             closeTakeBookModal();
             document.getElementById('bookRequestForm').reset();
         }
 
         document.addEventListener('click', e => { if (e.target === document.getElementById('takeBookModal')) closeTakeBookModal(); });
+        window.addEventListener('DOMContentLoaded', () => { setLoanDays(14); setActiveNav('home'); });
 
         async function logout() {
             if (!confirm('Are you sure you want to logout?')) return;
@@ -413,10 +478,9 @@
 
         function setActiveNav(page) {
             const navLinks = { 'home': document.getElementById('navHome'), 'books': document.getElementById('navBooks'), 'post-book': document.getElementById('navPostBook'), 'profile': document.getElementById('navProfile') };
-            Object.values(navLinks).forEach(l => { if(l) { l.classList.remove('bg-violet-500'); l.classList.add('bg-violet-100'); } });
-            if (navLinks[page]) { navLinks[page].classList.remove('bg-violet-100'); navLinks[page].classList.add('bg-violet-500'); }
+            Object.values(navLinks).forEach(l => { if(l) l.classList.remove('active'); });
+            if (navLinks[page]) navLinks[page].classList.add('active');
         }
-        window.addEventListener('DOMContentLoaded', () => setActiveNav('home'));
     </script>
 </body>
 </html>

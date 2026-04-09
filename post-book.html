@@ -106,36 +106,31 @@
 </head>
 
 <body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
-    <!-- Top Navigation Bar -->
-    <nav class="fixed top-0 w-full z-50 bg-gray-100 border-b border-gray-300 shadow-sm">
-        <div class="flex justify-between items-center w-full px-8 h-20 max-w-7xl mx-auto">
-            <!-- Logo -->
-            <a href="home.html" class="flex items-center gap-2 no-underline">
-                <img src="booklink-logo.svg" alt="BOOKLINK Logo" class="w-12 h-12">
-                <span class="text-xl font-black text-gray-900 tracking-tight">BOOKLINK</span>
+    <!-- Professional Navbar -->
+    <header class="fixed top-0 w-full z-50" style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);border-bottom:1px solid rgba(255,255,255,0.08);">
+        <nav class="flex justify-between items-center w-full px-6 h-16 max-w-7xl mx-auto">
+            <a href="home.html" class="flex items-center gap-2.5 no-underline group">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-lg" style="background:linear-gradient(135deg,#667eea,#764ba2);">📚</div>
+                <span class="text-lg font-black text-white tracking-tight group-hover:text-purple-300 transition-colors">BOOKLINK</span>
             </a>
-            <div class="hidden md:flex items-center space-x-3">
-                <a id="navHome" class="text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm"
-                    href="home.html">Home</a>
-                <a id="navBooks" class="text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm"
-                    href="home.html?view=books">Books</a>
-                <a id="navPostBook" class="text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm"
-                    href="post-book.html">Post Book</a>
-                <a id="navProfile" class="text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm"
-                    href="profile.html">Profile</a>
+            <div class="hidden md:flex items-center gap-1">
+                <a id="navHome" href="home.html" class="nav-link flex items-center gap-1.5 text-gray-300 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/10"><span class="material-symbols-outlined" style="font-size:16px;">home</span>Home</a>
+                <a id="navBooks" href="home.html?view=books" class="nav-link flex items-center gap-1.5 text-gray-300 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/10"><span class="material-symbols-outlined" style="font-size:16px;">library_books</span>Books</a>
+                <a id="navPostBook" href="post-book.html" class="nav-link flex items-center gap-1.5 text-gray-300 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/10"><span class="material-symbols-outlined" style="font-size:16px;">add_circle</span>Post Book</a>
+                <a id="navProfile" href="profile.html" class="nav-link flex items-center gap-1.5 text-gray-300 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/10"><span class="material-symbols-outlined" style="font-size:16px;">person</span>Profile</a>
             </div>
-            <div class="flex items-center gap-4">
-                <div class="hidden md:flex items-center gap-2">
-                    <span class="material-symbols-outlined text-violet-500">account_circle</span>
-                    <span id="userDisplay" class="text-sm font-semibold text-gray-800">User</span>
+            <div class="flex items-center gap-3">
+                <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full" style="background:rgba(255,255,255,0.08);">
+                    <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white" style="background:linear-gradient(135deg,#667eea,#764ba2);" id="userAvatar">U</div>
+                    <span id="userDisplay" class="text-sm font-medium text-gray-200">User</span>
                 </div>
-                <button onclick="logout()"
-                    class="bg-violet-100 hover:bg-violet-500 text-black px-6 py-2 rounded-lg font-semibold text-sm transition-all active:scale-95 shadow-md">
-                    Logout
+                <button onclick="logout()" class="flex items-center gap-1.5 text-sm font-semibold px-4 py-2 rounded-lg transition-all active:scale-95" style="background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);" onmouseover="this.style.background='rgba(239,68,68,0.3)'" onmouseout="this.style.background='rgba(239,68,68,0.15)'">
+                    <span class="material-symbols-outlined" style="font-size:16px;">logout</span>Logout
                 </button>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
+    <style>.nav-link.active{background:rgba(102,126,234,0.2)!important;color:#a5b4fc!important;}</style>
 
     <!-- Main Content -->
     <main class="pt-32 pb-16 px-6 md:px-8">
@@ -516,7 +511,12 @@
 
         function displayUserInfo() {
             const userName = localStorage.getItem('userName');
-            document.getElementById('userDisplay').textContent = 'Welcome, ' + (userName?.split(' ')[0] || 'User');
+            const name = userName?.split(' ')[0] || 'User';
+            const el = document.getElementById('userDisplay');
+            const av = document.getElementById('userAvatar');
+            if (el) el.textContent = name;
+            if (av) av.textContent = name.charAt(0).toUpperCase();
+        }
         }
 
         async function logout() {
@@ -579,8 +579,8 @@
 
         function setActiveNav(page) {
             const navLinks = { 'home': document.getElementById('navHome'), 'books': document.getElementById('navBooks'), 'post-book': document.getElementById('navPostBook'), 'profile': document.getElementById('navProfile') };
-            Object.values(navLinks).forEach(l => { if(l) { l.classList.remove('bg-violet-500'); l.classList.add('bg-violet-100'); } });
-            if (navLinks[page]) { navLinks[page].classList.remove('bg-violet-100'); navLinks[page].classList.add('bg-violet-500'); }
+            Object.values(navLinks).forEach(l => { if(l) l.classList.remove('active'); });
+            if (navLinks[page]) navLinks[page].classList.add('active');
         }
         window.addEventListener('DOMContentLoaded', () => setActiveNav('post-book'));
     </script>

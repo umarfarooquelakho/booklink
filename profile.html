@@ -59,36 +59,31 @@
 </head>
 
 <body class="bg-background text-on-background font-body">
-    <!-- Navigation -->
-    <header class="fixed top-0 w-full z-50 bg-gray-100 border-b border-gray-300 shadow-sm">
-        <nav class="flex justify-between items-center w-full px-8 h-20 max-w-7xl mx-auto">
-            <!-- Logo -->
-            <a href="home.html" class="flex items-center gap-2 no-underline">
-                <img src="booklink-logo.svg" alt="BOOKLINK Logo" class="w-12 h-12">
-                <span class="text-xl font-black text-gray-900 tracking-tight">BOOKLINK</span>
+    <!-- Professional Navbar -->
+    <header class="fixed top-0 w-full z-50" style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);border-bottom:1px solid rgba(255,255,255,0.08);">
+        <nav class="flex justify-between items-center w-full px-6 h-16 max-w-7xl mx-auto">
+            <a href="home.html" class="flex items-center gap-2.5 no-underline group">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-lg" style="background:linear-gradient(135deg,#667eea,#764ba2);">📚</div>
+                <span class="text-lg font-black text-white tracking-tight group-hover:text-purple-300 transition-colors">BOOKLINK</span>
             </a>
-            <div class="hidden md:flex items-center space-x-3">
-                <a id="navHome" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm"
-                    href="home.html">Home</a>
-                <a id="navBooks" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm"
-                    href="home.html?view=books">Books</a>
-                <a id="navPostBook" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm"
-                    href="post-book.html">Post Book</a>
-                <a id="navProfile" class="font-manrope text-black font-medium px-4 py-2 rounded-lg bg-violet-100 hover:bg-violet-500 hover:text-black transition-all duration-200 text-sm"
-                    href="profile.html">Profile</a>
+            <div class="hidden md:flex items-center gap-1">
+                <a id="navHome" href="home.html" class="nav-link flex items-center gap-1.5 text-gray-300 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/10"><span class="material-symbols-outlined" style="font-size:16px;">home</span>Home</a>
+                <a id="navBooks" href="home.html?view=books" class="nav-link flex items-center gap-1.5 text-gray-300 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/10"><span class="material-symbols-outlined" style="font-size:16px;">library_books</span>Books</a>
+                <a id="navPostBook" href="post-book.html" class="nav-link flex items-center gap-1.5 text-gray-300 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/10"><span class="material-symbols-outlined" style="font-size:16px;">add_circle</span>Post Book</a>
+                <a id="navProfile" href="profile.html" class="nav-link flex items-center gap-1.5 text-gray-300 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/10"><span class="material-symbols-outlined" style="font-size:16px;">person</span>Profile</a>
             </div>
-            <div class="flex items-center gap-4">
-                <div class="hidden md:flex items-center gap-2">
-                    <span class="material-symbols-outlined text-violet-500">account_circle</span>
-                    <span id="userDisplay" class="text-sm font-semibold text-gray-800">User</span>
+            <div class="flex items-center gap-3">
+                <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full" style="background:rgba(255,255,255,0.08);">
+                    <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white" style="background:linear-gradient(135deg,#667eea,#764ba2);" id="userAvatar">U</div>
+                    <span id="userDisplay" class="text-sm font-medium text-gray-200">User</span>
                 </div>
-                <button onclick="logout()"
-                    class="bg-violet-100 hover:bg-violet-500 text-black px-6 py-2 rounded-lg font-semibold text-sm transition-all active:scale-95 shadow-md">
-                    Logout
+                <button onclick="logout()" class="flex items-center gap-1.5 text-sm font-semibold px-4 py-2 rounded-lg transition-all active:scale-95" style="background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);" onmouseover="this.style.background='rgba(239,68,68,0.3)'" onmouseout="this.style.background='rgba(239,68,68,0.15)'">
+                    <span class="material-symbols-outlined" style="font-size:16px;">logout</span>Logout
                 </button>
             </div>
         </nav>
     </header>
+    <style>.nav-link.active{background:rgba(102,126,234,0.2)!important;color:#a5b4fc!important;}</style>
 
     <!-- Main Content -->
     <main class="pt-32 pb-16 px-8">
@@ -344,7 +339,12 @@
 
         function displayUserInfo() {
             const userName = localStorage.getItem('userName');
-            document.getElementById('userDisplay').textContent = 'Welcome, ' + (userName?.split(' ')[0] || 'User');
+            const name = userName?.split(' ')[0] || 'User';
+            const el = document.getElementById('userDisplay');
+            const av = document.getElementById('userAvatar');
+            if (el) el.textContent = name;
+            if (av) av.textContent = name.charAt(0).toUpperCase();
+        }
         }
 
         async function loadProfileData() {
@@ -374,35 +374,66 @@
 
             if (books?.length) {
                 document.getElementById('noBooks').classList.add('hidden');
-                document.getElementById('myBooksList').innerHTML = books.map(book => `
-                    <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all flex flex-col group">
+                document.getElementById('myBooksList').innerHTML = books.map(book => {
+                    const isOnLoan = book.loan_status === 'on_loan';
+                    const dueDate = book.loan_due_date ? new Date(book.loan_due_date) : null;
+                    const today = new Date();
+                    const daysLeft = dueDate ? Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24)) : null;
+                    const isOverdue = daysLeft !== null && daysLeft < 0;
+
+                    let loanBadge = '';
+                    if (isOnLoan) {
+                        loanBadge = `
+                        <div class="mb-3 p-3 rounded-lg ${isOverdue ? 'bg-red-50 border border-red-200' : 'bg-amber-50 border border-amber-200'}">
+                            <div class="flex items-center gap-1 mb-1">
+                                <span class="material-symbols-outlined text-sm ${isOverdue ? 'text-red-500' : 'text-amber-600'}">schedule</span>
+                                <span class="text-xs font-bold ${isOverdue ? 'text-red-600' : 'text-amber-700'}">
+                                    ${isOverdue ? '⚠️ OVERDUE by ' + Math.abs(daysLeft) + ' days' : '📖 On Loan — ' + daysLeft + ' days left'}
+                                </span>
+                            </div>
+                            <p class="text-xs text-gray-600">👤 Borrower: <strong>${book.borrower_name || book.borrower_email || '—'}</strong></p>
+                            <p class="text-xs text-gray-600">📅 Due: <strong>${dueDate ? dueDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—'}</strong></p>
+                        </div>`;
+                    }
+
+                    return `
+                    <div class="bg-white border ${isOnLoan ? (isOverdue ? 'border-red-300' : 'border-amber-300') : 'border-gray-200'} rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all flex flex-col group">
                         <div class="relative cursor-pointer overflow-hidden" onclick="window.location.href='book-detail.html?id=${book.id}'">
-                            <img src="${book.cover_url || ''}" alt="${book.title}" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300" />
+                            <img src="${book.cover_url || ''}" alt="${book.title}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
+                            ${isOnLoan ? `<div class="absolute top-2 right-2 ${isOverdue ? 'bg-red-500' : 'bg-amber-500'} text-white text-xs font-bold px-2 py-1 rounded-full">
+                                ${isOverdue ? '⚠️ Overdue' : '📖 On Loan'}
+                            </div>` : ''}
+                            ${!isOnLoan && !book.landed ? '<div class="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">✓ Available</div>' : ''}
                         </div>
                         <div class="p-4 flex-1 flex flex-col">
                             <h3 class="font-bold text-sm line-clamp-2 mb-1">${book.title}</h3>
-                            <p class="text-xs text-on-surface-variant mb-3 flex-1">${book.author}</p>
+                            <p class="text-xs text-on-surface-variant mb-2">${book.author}</p>
                             <div class="flex items-center justify-between mb-3 pb-3 border-b border-gray-200">
                                 <span class="text-sm text-primary font-bold">${'★'.repeat(parseInt(book.rating||0))}${'☆'.repeat(5-parseInt(book.rating||0))}</span>
                                 <span class="text-xs bg-primary/10 text-primary px-2 py-1 rounded">${book.genre}</span>
                             </div>
-                            ${book.landed ? '<span class="inline-block bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full mb-3">✓ Landed</span>' : ''}
-                            <div class="flex gap-2">
+                            ${loanBadge}
+                            <div class="flex gap-1.5 flex-wrap">
                                 <button onclick="window.location.href='book-detail.html?id=${book.id}'" class="flex-1 bg-primary text-white py-2 rounded-lg font-semibold text-xs flex items-center justify-center gap-1">
                                     <span class="material-symbols-outlined text-sm">info</span>View
                                 </button>
                                 <button onclick="openEditModal('${book.id}')" class="flex-1 bg-blue-50 text-blue-600 py-2 rounded-lg font-semibold text-xs flex items-center justify-center gap-1">
                                     <span class="material-symbols-outlined text-sm">edit</span>Edit
                                 </button>
-                                ${!book.landed ? `<button onclick="markAsLanded('${book.id}')" class="flex-1 bg-green-50 text-green-600 py-2 rounded-lg font-semibold text-xs flex items-center justify-center gap-1">
-                                    <span class="material-symbols-outlined text-sm">check_circle</span>Landed
-                                </button>` : ''}
+                                ${isOnLoan ? `
+                                <button onclick="markReturned('${book.id}')" class="flex-1 bg-green-600 text-white py-2 rounded-lg font-semibold text-xs flex items-center justify-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">assignment_return</span>Returned
+                                </button>` : `
+                                <button onclick="markAsLanded('${book.id}')" class="flex-1 bg-green-50 text-green-600 py-2 rounded-lg font-semibold text-xs flex items-center justify-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">check_circle</span>Lend
+                                </button>`}
                                 <button onclick="deleteBook('${book.id}')" class="flex-1 bg-red-50 text-red-600 py-2 rounded-lg font-semibold text-xs flex items-center justify-center gap-1">
                                     <span class="material-symbols-outlined text-sm">delete</span>Delete
                                 </button>
                             </div>
                         </div>
-                    </div>`).join('');
+                    </div>`;
+                }).join('');
             }
 
             if (requests?.length) {
@@ -420,6 +451,9 @@
                                 <div class="space-y-1 text-xs text-on-surface-variant">
                                     <p>📧 <span class="font-semibold">From:</span> ${req.requester_email}</p>
                                     <p>📞 <span class="font-semibold">Phone:</span> ${req.requester_phone || '—'}</p>
+                                    ${req.borrower_name ? `<p>👤 <span class="font-semibold">Name:</span> ${req.borrower_name}</p>` : ''}
+                                    ${req.loan_days ? `<p>📅 <span class="font-semibold">Loan Duration:</span> ${req.loan_days} days</p>` : ''}
+                                    ${req.due_date ? `<p>🔔 <span class="font-semibold">Due Back By:</span> <strong>${new Date(req.due_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</strong></p>` : ''}
                                     ${req.message ? `<p>💬 <span class="font-semibold">Message:</span> ${req.message}</p>` : ''}
                                     <p>🕐 <span class="font-semibold">Requested:</span> ${new Date(req.created_at).toLocaleDateString()}</p>
                                 </div>
@@ -444,9 +478,38 @@
         }
 
         async function approveRequest(reqId, bookId) {
-            await sb.from('books').update({ landed: true }).eq('id', bookId);
+            // Get the request details for due date
+            const { data: req } = await sb.from('book_requests').select('*').eq('id', reqId).single();
+            const loanDays = req?.loan_days || 14;
+            const dueDate = req?.due_date || (() => { const d = new Date(); d.setDate(d.getDate() + loanDays); return d.toISOString(); })();
+
+            // Update book to on_loan status
+            await sb.from('books').update({
+                loan_status: 'on_loan',
+                loan_due_date: dueDate,
+                loan_start_date: new Date().toISOString(),
+                borrower_email: req?.requester_email,
+                borrower_name: req?.borrower_name,
+                landed: true
+            }).eq('id', bookId);
+
             await sb.from('book_requests').update({ status: 'approved' }).eq('id', reqId);
-            alert('✅ Request approved!'); loadProfileData();
+            alert('✅ Request approved! Book is now on loan until ' + new Date(dueDate).toLocaleDateString());
+            loadProfileData();
+        }
+
+        async function markReturned(bookId) {
+            if (!confirm('Mark this book as returned? It will become available again.')) return;
+            await sb.from('books').update({
+                loan_status: 'available',
+                loan_due_date: null,
+                loan_start_date: null,
+                borrower_email: null,
+                borrower_name: null,
+                landed: false
+            }).eq('id', bookId);
+            alert('✅ Book marked as returned and available again!');
+            loadProfileData();
         }
 
         async function rejectRequest(reqId) {
@@ -514,8 +577,8 @@
 
         function setActiveNav(page) {
             const navLinks = { 'home': document.getElementById('navHome'), 'books': document.getElementById('navBooks'), 'post-book': document.getElementById('navPostBook'), 'profile': document.getElementById('navProfile') };
-            Object.values(navLinks).forEach(l => { if(l) { l.classList.remove('bg-violet-500'); l.classList.add('bg-violet-100'); } });
-            if (navLinks[page]) { navLinks[page].classList.remove('bg-violet-100'); navLinks[page].classList.add('bg-violet-500'); }
+            Object.values(navLinks).forEach(l => { if(l) l.classList.remove('active'); });
+            if (navLinks[page]) navLinks[page].classList.add('active');
         }
         window.addEventListener('DOMContentLoaded', () => setActiveNav('profile'));
     </script>
