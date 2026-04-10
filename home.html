@@ -253,34 +253,23 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase.js"></script>
+    <script src="app.js"></script>
     <script>
         // Init — books visible to everyone, auth optional
         window.addEventListener('load', async function () {
-            const { data: { session } } = await sb.auth.getSession();
+            const session = await getSession();
             if (session) {
-                const user = session.user;
-                localStorage.setItem('userName', user.user_metadata?.full_name || user.email.split('@')[0]);
-                localStorage.setItem('userEmail', user.email);
-                localStorage.setItem('userId', user.id);
+                setUserLocals(session.user);
             }
-            displayUserInfo();
+            updateNavUser();
             loadAndDisplayBooks();
         });
-
-        function displayUserInfo() {
-            const userName = localStorage.getItem('userName');
-            const userDisplay = document.getElementById('userDisplay');
-            if (userName) {
-                userDisplay.textContent = 'Welcome, ' + (userName.split(' ')[0]);
-            } else {
-                userDisplay.textContent = 'Guest';
-            }
-        }
 
         async function loadAndDisplayBooks() {
             const booksContainer = document.getElementById('booksContainer');
             const emptyState = document.getElementById('emptyState');
-            booksContainer.innerHTML = '<p class="col-span-full text-center text-gray-400 py-10">Loading books...</p>';
+            showSkeleton('booksContainer', 12);
+            emptyState.style.display = 'none';
 
             const { data: books, error } = await sb.from('books').select('*').order('created_at', { ascending: false });
 

@@ -325,15 +325,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase.js"></script>
+    <script src="app.js"></script>
     <script>
         window.addEventListener('load', async function() {
-            const { data: { session } } = await sb.auth.getSession();
+            const session = await getSession();
             if (!session) { window.location.href = 'index.html'; return; }
-            const user = session.user;
-            localStorage.setItem('userName', user.user_metadata?.full_name || user.email.split('@')[0]);
-            localStorage.setItem('userEmail', user.email);
-            localStorage.setItem('userId', user.id);
-            displayUserInfo();
+            setUserLocals(session.user);
+            updateNavUser();
             loadProfileData();
         });
 
@@ -345,17 +343,17 @@
             if (el) el.textContent = name;
             if (av) av.textContent = name.charAt(0).toUpperCase();
         }
-        }
 
         async function loadProfileData() {
             const userId = localStorage.getItem('userId');
             const userName = localStorage.getItem('userName');
             const userEmail = localStorage.getItem('userEmail');
 
-            document.getElementById('profileName').textContent = userName || 'User';
+            document.getElementById('profileName').textContent = userName || user?.email?.split('@')[0] || 'User';
             document.getElementById('profileEmail').textContent = userEmail || '';
 
-            const { data: books } = await sb.from('books').select('*').eq('user_id', userId).order('created_at', { ascending: false });
+            const { data: books, error: booksError } = await sb.from('books').select('*').eq('user_id', userId).order('created_at', { ascending: false });
+            if (booksError) console.error('Books error:', booksError);
 
             // Get all book IDs owned by this user, then fetch requests for those books
             const bookIds = books?.map(b => b.id) || [];
