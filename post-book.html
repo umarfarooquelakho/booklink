@@ -482,14 +482,15 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase.js"></script>
-    <script src="app.js"></script>
     <script>
         window.addEventListener('load', async function () {
-            const session = await getSession();
-            if (!session) { window.location.href = 'index.html'; return; }
-            setUserLocals(session.user);
-            updateNavUser();
-            setupImagePreview();
+            const { data: { session } } = await sb.auth.getSession();
+            if (!session) { alert('Please login first!'); window.location.href = 'index.html'; return; }
+            const user = session.user;
+            localStorage.setItem('userName', user.user_metadata?.full_name || user.email.split('@')[0]);
+            localStorage.setItem('userEmail', user.email);
+            localStorage.setItem('userId', user.id);
+            displayUserInfo();
             document.getElementById('ownerEmail').value = user.email;
         });
 
