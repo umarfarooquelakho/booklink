@@ -250,35 +250,35 @@
     </main>
 
     <!-- Take Book Modal -->
-    <div id="takeBookModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 animate-scale-in">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="font-headline text-2xl font-bold text-on-background">Request Book</h2>
-                <button onclick="closeTakeBookModal()" class="text-gray-400 hover:text-gray-600 text-2xl">✕</button>
+    <div id="takeBookModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-start justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-scale-in my-8">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="font-headline text-xl font-bold text-on-background">Request Book</h2>
+                <button onclick="closeTakeBookModal()" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">✕</button>
             </div>
 
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
                 <p class="text-sm text-on-background">
                     <span class="font-semibold">Contact the book owner</span> to request this book. They'll get your details and can confirm the handover.
                 </p>
             </div>
 
             <form onsubmit="submitBookRequest(event)" id="bookRequestForm">
-                <div class="space-y-4">
+                <div class="space-y-3">
                     <div>
-                        <label class="block text-sm font-semibold text-on-background mb-2">Your Name</label>
-                        <input type="text" id="requesterName" placeholder="Your full name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary">
+                        <label class="block text-sm font-semibold text-on-background mb-1">Your Name *</label>
+                        <input type="text" id="requesterName" placeholder="Your full name" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-primary text-sm">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-on-background mb-2">Your Email</label>
-                        <input type="email" id="requesterEmail" placeholder="your@email.com" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary">
+                        <label class="block text-sm font-semibold text-on-background mb-1">Your Email *</label>
+                        <input type="email" id="requesterEmail" placeholder="your@email.com" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-primary text-sm">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-on-background mb-2">Your Phone</label>
-                        <input type="tel" id="requesterPhone" placeholder="+1 (555) 123-4567" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary">
+                        <label class="block text-sm font-semibold text-on-background mb-1">Your Phone *</label>
+                        <input type="tel" id="requesterPhone" placeholder="+1 (555) 123-4567" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-primary text-sm">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-on-background mb-2">📅 Loan Duration</label>
+                        <label class="block text-sm font-semibold text-on-background mb-1">📅 Loan Duration</label>
                         <div class="grid grid-cols-3 gap-2 mb-2">
                             <button type="button" onclick="setLoanDays(7)" class="loan-btn py-2 rounded-lg border-2 border-gray-200 text-sm font-semibold hover:border-primary hover:text-primary transition-all">7 Days</button>
                             <button type="button" onclick="setLoanDays(14)" class="loan-btn py-2 rounded-lg border-2 border-primary text-primary text-sm font-semibold bg-primary/5">14 Days</button>
@@ -289,20 +289,20 @@
                             <span class="text-sm text-gray-500">days</span>
                         </div>
                         <input type="hidden" id="loanDays" value="14">
-                        <p id="dueDatePreview" class="text-xs text-primary font-medium mt-2">📅 Due back by: <span id="dueDateText"></span></p>
+                        <p class="text-xs text-primary font-medium mt-1">📅 Due back by: <span id="dueDateText"></span></p>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-on-background mb-2">Message (Optional)</label>
-                        <textarea id="requesterMessage" placeholder="Tell the owner why you want this book..." rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary resize-none"></textarea>
+                        <label class="block text-sm font-semibold text-on-background mb-1">Message (Optional)</label>
+                        <textarea id="requesterMessage" placeholder="Tell the owner why you want this book..." rows="2" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-primary resize-none text-sm"></textarea>
                     </div>
                 </div>
 
-                <div class="flex gap-3 mt-6">
-                    <button type="button" onclick="closeTakeBookModal()" class="flex-1 px-4 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-bold hover:bg-gray-50 transition-all">
+                <div class="flex gap-3 mt-5">
+                    <button type="button" onclick="closeTakeBookModal()" class="flex-1 px-4 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-bold hover:bg-gray-50 transition-all text-sm">
                         Cancel
                     </button>
-                    <button type="submit" class="flex-1 px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-bold transition-all">
-                        Send Request
+                    <button type="submit" class="flex-1 px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold transition-all text-sm shadow-lg">
+                        📨 Send Request
                     </button>
                 </div>
             </form>
