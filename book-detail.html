@@ -107,6 +107,10 @@
                             <span class="material-symbols-outlined">card_giftcard</span>
                             Take This Book
                         </button>
+                        <button onclick="returnBook()" id="returnBookBtn" class="w-full hidden bg-amber-500 hover:bg-amber-600 text-white py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2 mb-4">
+                            <span class="material-symbols-outlined">assignment_return</span>
+                            I Returned This Book
+                        </button>
                         <button onclick="shareBook()" class="w-full border-2 border-primary text-primary hover:bg-primary/5 py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2">
                             <span class="material-symbols-outlined">share</span>
                             Share Book
@@ -419,6 +423,16 @@
             if (book.owner_phone) { document.getElementById('ownerPhone').textContent = book.owner_phone; document.getElementById('phoneContainer').classList.remove('hidden'); }
             if (book.owner_location) { document.getElementById('ownerLocation').textContent = book.owner_location; document.getElementById('locationContainer').classList.remove('hidden'); }
 
+            // Show return button if current user is the borrower
+            const currentEmail = localStorage.getItem('userEmail');
+            if (book.loan_status === 'on_loan' && book.borrower_email === currentEmail) {
+                document.getElementById('returnBookBtn').classList.remove('hidden');
+                document.getElementById('takeBookBtn').classList.add('hidden');
+            }
+
+            // Check if user is blocked before allowing requests
+            await checkIfBlocked(book);
+
             loadRelatedBooks(bookId, book.genre);
         }
 
@@ -436,6 +450,47 @@
         function shareBook() { navigator.clipboard?.writeText(window.location.href); alert('🔗 Link copied!'); }
         function takeBook() { document.getElementById('takeBookModal').classList.remove('hidden'); }
         function closeTakeBookModal() { document.getElementById('takeBookModal').classList.add('hidden'); }
+
+        async function checkIfBlocked(book) {
+            const userEmail = localStorage.getItem('userEmail');
+            if (!userEmail) return;
+            const { data } = await sb.from('blocked_users').select('id').eq('blocked_user_email', userEmail).limit(1);
+            if (data?.length > 0) {
+                const btn = document.getElementById('takeBookBtn');
+                if (btn) {
+                    btn.disabled = true;
+                    btn.classList.remove('bg-green-600','hover:bg-green-700');
+                    btn.classList.add('bg-red-200','cursor-not-allowed');
+                    btn.innerHTML = '<span class="material-symbols-outlined">block</span> Your account is blocked';
+                }
+            }
+        }
+
+        async function returnBook() {
+            const bookId = new URLSearchParams(window.location.search).get('id');
+            const userEmail = localStorage.getItem('userEmail');
+            if (!confirm('Confirm you have returned this book to the owner?')) return;
+
+            // Find the approved request for this user and book
+            const { data: req } = await sb.from('book_requests')
+                .select('id')
+                .eq('book_id', bookId)
+                .eq('requester_email', userEmail)
+                .eq('status', 'approved')
+                .limit(1)
+                .single();
+
+            if (req) {
+                await sb.from('book_requests').update({
+                    return_requested: true,
+                    return_requested_at: new Date().toISOString()
+                }).eq('id', req.id);
+            }
+
+            alert('✅ Return notification sent to the owner! They will confirm receipt.');
+            document.getElementById('returnBookBtn').classList.add('hidden');
+            document.getElementById('takeBookBtn').classList.remove('hidden');
+        }
 
         async function submitBookRequest(event) {
             event.preventDefault();

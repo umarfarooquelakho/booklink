@@ -178,6 +178,19 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Blocked Users Section -->
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden mt-8" id="blockedSection" style="display:none;">
+                <div class="bg-red-50 px-8 py-6 border-b border-red-100">
+                    <h2 class="font-headline text-lg font-bold flex items-center gap-2 text-red-700">
+                        <span class="material-symbols-outlined">block</span>
+                        Blocked Users
+                    </h2>
+                </div>
+                <div class="p-8">
+                    <div id="blockedList" class="space-y-3"></div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -386,6 +399,25 @@
                 }
             }
 
+            // Load blocked users
+            const userId = localStorage.getItem('userId');
+            const { data: blocked } = await sb.from('blocked_users').select('*').eq('blocked_by_user_id', userId);
+            if (blocked?.length) {
+                document.getElementById('blockedSection').style.display = 'block';
+                document.getElementById('blockedList').innerHTML = blocked.map(b => `
+                    <div class="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg">
+                        <div>
+                            <p class="font-semibold text-sm text-red-800">🚫 ${b.blocked_user_email}</p>
+                            <p class="text-xs text-red-600 mt-0.5">${b.reason || 'Blocked'} · ${new Date(b.created_at).toLocaleDateString()}</p>
+                        </div>
+                        <button onclick="unblockUser('${b.blocked_user_email}')" class="bg-white border border-red-300 text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all">
+                            Unblock
+                        </button>
+                    </div>`).join('');
+            } else {
+                document.getElementById('blockedSection').style.display = 'none';
+            }
+
             if (books?.length) {
                 document.getElementById('noBooks').classList.add('hidden');
                 document.getElementById('myBooksList').innerHTML = books.map(book => {
@@ -437,7 +469,10 @@
                                 ${isOnLoan ? `
                                 <button onclick="markReturned('${book.id}')" class="flex-1 bg-green-600 text-white py-2 rounded-lg font-semibold text-xs flex items-center justify-center gap-1">
                                     <span class="material-symbols-outlined text-sm">assignment_return</span>Returned
-                                </button>` : `
+                                </button>
+                                ${isOverdue ? `<button onclick="blockUser('${book.borrower_email}','${book.title}')" class="flex-1 bg-red-600 text-white py-2 rounded-lg font-semibold text-xs flex items-center justify-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">block</span>Block User
+                                </button>` : ''}` : `
                                 <button onclick="markAsLanded('${book.id}')" class="flex-1 bg-green-50 text-green-600 py-2 rounded-lg font-semibold text-xs flex items-center justify-center gap-1">
                                     <span class="material-symbols-outlined text-sm">check_circle</span>Lend
                                 </button>`}
@@ -461,6 +496,7 @@
                                     <span class="text-xs font-bold px-2 py-0.5 rounded-full ${req.status === 'approved' ? 'bg-green-200 text-green-800' : req.status === 'rejected' ? 'bg-red-200 text-red-800' : 'bg-amber-200 text-amber-800'}">
                                         ${req.status === 'approved' ? '✓ Approved' : req.status === 'rejected' ? '✗ Rejected' : '⏳ Pending'}
                                     </span>
+                                    ${req.return_requested ? '<span class="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-200 text-blue-800">📬 Return Requested</span>' : ''}
                                 </div>
                                 <div class="space-y-1 text-xs text-on-surface-variant">
                                     <p>📧 <span class="font-semibold">From:</span> ${req.requester_email}</p>
@@ -523,6 +559,28 @@
                 landed: false
             }).eq('id', bookId);
             alert('✅ Book marked as returned and available again!');
+            loadProfileData();
+        }
+
+        async function blockUser(email, bookTitle) {
+            if (!email) { alert('No borrower email found.'); return; }
+            if (!confirm(`Block ${email}? They won't be able to request books or post books.`)) return;
+            const userId = localStorage.getItem('userId');
+            const { error } = await sb.from('blocked_users').insert({
+                blocked_user_email: email,
+                blocked_by_user_id: userId,
+                reason: `Did not return "${bookTitle}" on time`
+            });
+            if (error) { alert('Error: ' + error.message); return; }
+            alert(`✅ ${email} has been blocked.`);
+            loadProfileData();
+        }
+
+        async function unblockUser(email) {
+            if (!confirm(`Unblock ${email}?`)) return;
+            const userId = localStorage.getItem('userId');
+            await sb.from('blocked_users').delete().eq('blocked_user_email', email).eq('blocked_by_user_id', userId);
+            alert(`✅ ${email} has been unblocked.`);
             loadProfileData();
         }
 
