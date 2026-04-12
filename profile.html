@@ -334,6 +334,7 @@
             localStorage.setItem('userEmail', user.email);
             localStorage.setItem('userId', user.id);
             displayUserInfo();
+            loadProfileData();
         });
 
         function displayUserInfo() {
@@ -350,8 +351,11 @@
             const userName = localStorage.getItem('userName');
             const userEmail = localStorage.getItem('userEmail');
 
-            document.getElementById('profileName').textContent = userName || user?.email?.split('@')[0] || 'User';
+            document.getElementById('profileName').textContent = userName || 'User';
             document.getElementById('profileEmail').textContent = userEmail || '';
+            document.getElementById('bookmarkCount').textContent = '0';
+            const joined = new Date();
+            document.getElementById('memberSince').textContent = 'Member since ' + joined.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
             const { data: books, error: booksError } = await sb.from('books').select('*').eq('user_id', userId).order('created_at', { ascending: false });
             if (booksError) console.error('Books error:', booksError);
@@ -370,6 +374,17 @@
             const pendingCount = requests.filter(r => r.status === 'pending').length;
             document.getElementById('booksPosted').textContent = books?.length || 0;
             document.getElementById('booksSeeking').textContent = pendingCount;
+
+            // Show badge on requests section
+            const badge = document.getElementById('requestsBadge');
+            if (badge) {
+                if (pendingCount > 0) {
+                    badge.textContent = pendingCount;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            }
 
             if (books?.length) {
                 document.getElementById('noBooks').classList.add('hidden');
