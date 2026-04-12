@@ -367,14 +367,19 @@
             document.getElementById('profileName').textContent = userName || 'User';
             document.getElementById('profileEmail').textContent = userEmail || '';
             document.getElementById('bookmarkCount').textContent = '0';
-            const joined = new Date();
-            document.getElementById('memberSince').textContent = 'Member since ' + joined.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            document.getElementById('memberSince').textContent = 'Member since ' + new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
-            const { data: books, error: booksError } = await sb.from('books').select('*').eq('user_id', userId).order('created_at', { ascending: false });
-            if (booksError) console.error('Books error:', booksError);
+            // Run all 3 queries in parallel
+            const [booksRes, blockedRes] = await Promise.all([
+                sb.from('books').select('*').eq('user_id', userId).order('created_at', { ascending: false }),
+                sb.from('blocked_users').select('*').eq('blocked_by_user_id', userId)
+            ]);
 
-            // Get all book IDs owned by this user, then fetch requests for those books
-            const bookIds = books?.map(b => b.id) || [];
+            const books = booksRes.data || [];
+            const blocked = blockedRes.data || [];
+
+            // Fetch requests for owned books
+            const bookIds = books.map(b => b.id);
             let requests = [];
             if (bookIds.length > 0) {
                 const { data: reqs } = await sb.from('book_requests')
@@ -385,24 +390,17 @@
             }
 
             const pendingCount = requests.filter(r => r.status === 'pending').length;
-            document.getElementById('booksPosted').textContent = books?.length || 0;
+            document.getElementById('booksPosted').textContent = books.length;
             document.getElementById('booksSeeking').textContent = pendingCount;
 
-            // Show badge on requests section
             const badge = document.getElementById('requestsBadge');
             if (badge) {
-                if (pendingCount > 0) {
-                    badge.textContent = pendingCount;
-                    badge.classList.remove('hidden');
-                } else {
-                    badge.classList.add('hidden');
-                }
+                badge.textContent = pendingCount;
+                pendingCount > 0 ? badge.classList.remove('hidden') : badge.classList.add('hidden');
             }
 
-            // Load blocked users
-            const userId = localStorage.getItem('userId');
-            const { data: blocked } = await sb.from('blocked_users').select('*').eq('blocked_by_user_id', userId);
-            if (blocked?.length) {
+            // Blocked users section
+            if (blocked.length) {
                 document.getElementById('blockedSection').style.display = 'block';
                 document.getElementById('blockedList').innerHTML = blocked.map(b => `
                     <div class="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg">
@@ -410,9 +408,7 @@
                             <p class="font-semibold text-sm text-red-800">🚫 ${b.blocked_user_email}</p>
                             <p class="text-xs text-red-600 mt-0.5">${b.reason || 'Blocked'} · ${new Date(b.created_at).toLocaleDateString()}</p>
                         </div>
-                        <button onclick="unblockUser('${b.blocked_user_email}')" class="bg-white border border-red-300 text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all">
-                            Unblock
-                        </button>
+                        <button onclick="unblockUser('${b.blocked_user_email}')" class="bg-white border border-red-300 text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all">Unblock</button>
                     </div>`).join('');
             } else {
                 document.getElementById('blockedSection').style.display = 'none';

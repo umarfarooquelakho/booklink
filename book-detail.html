@@ -6,8 +6,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Book Details | BOOKLINK</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet" />
     <script id="tailwind-config">
@@ -430,10 +429,11 @@
                 document.getElementById('takeBookBtn').classList.add('hidden');
             }
 
-            // Check if user is blocked before allowing requests
-            await checkIfBlocked(book);
-
-            loadRelatedBooks(bookId, book.genre);
+            // Run related books and block check in parallel
+            await Promise.all([
+                loadRelatedBooks(bookId, book.genre),
+                checkIfBlocked(book)
+            ]);
         }
 
         async function loadRelatedBooks(currentId, genre) {
